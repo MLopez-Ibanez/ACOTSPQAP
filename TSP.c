@@ -65,8 +65,12 @@
 #include "utilities.h"
 
 #define M_PI 3.14159265358979323846264
+#define MAXCOORD 1000000
 
 long int n;          /* number of cities in the instance to be solved */
+int *key;            /* array of keys to generate random distance matrices */
+int param;           /* parameter to generate random distance matrices */
+double factor;       /* factor value to generate random distance matrices */
 
 struct problem instance;
 
@@ -77,6 +81,22 @@ static double dtrunc (double x)
     k = (int) x;
     x = (double) k;
     return x;
+}
+
+void initializeKeys(int instanceSeed)
+/*    
+      FUNCTION: initialize factor, param and key values to calculate the
+                random distances for explicit instances
+      INPUT:    seed used to generate the instance
+      OUTPUT:   none
+      COMMENTS: implemented according to the portmgen TSPLIB instance generator
+*/
+{
+    int i;
+    factor = MAXCOORD/2147483648.;
+    param = 104*instanceSeed + 1;
+    key = (int *) calloc (n+1, sizeof(int));
+    for (i=1; i<=n; i++) key[i] = 0x12345672*i + 1;
 }
 
 long int  (*distance)(long int, long int);  /* function pointer */
@@ -181,7 +201,37 @@ long int att_distance (long int i, long int j)
     return dij;
 }
 
+long int explicit_distance (long int i, long int j)
+/*    
+      FUNCTION: compute EXPLICIT random distance between two nodes
+      INPUT:    two node indices
+      OUTPUT:   distance between the two nodes
+      COMMENTS: for the definition of how to compute this distance see TSPLIB
+*/
+{
+    int x, y, z;
+    if (i == j) return 0;
 
+    i = key[i+1];
+    j = key[j+1];
+    
+    x = i&j;
+    y = i|j;
+    z = param;
+
+    x *= z;
+    y *= x;
+    z *= y;
+
+    z ^= param;
+
+    x *= z;
+    y *= x;
+    z *= y;
+
+    x = ((i+j)^z) & 0x7fffffff;
+    return (int)(x*factor);
+}
 
 long int ** compute_distances(void)
 /*    
@@ -319,8 +369,9 @@ struct point * read_etsp(const char *tsp_file_name)
     assert(tsp_file != NULL);
     printf("\nreading tsp-file %s ... \n\n", tsp_file_name);
 
+    int instanceSeed;
     fscanf(tsp_file,"%s", buf);
-    while ( strcmp("NODE_COORD_SECTION", buf) != 0 ) {
+    while ( (strcmp("NODE_COORD_SECTION", buf) != 0) && (strcmp("EDGE_WEIGHT_SECTION", buf) != 0)) {
 	if ( strcmp("NAME", buf) == 0 ) {
 	    fscanf(tsp_file, "%s", buf);
 	    trace_print("%s ", buf);
@@ -338,12 +389,22 @@ struct point * read_etsp(const char *tsp_file_name)
 	else if ( strcmp("COMMENT", buf) == 0 ){
 	    fgets(buf, LINE_BUF_LEN, tsp_file);
 	    trace_print("%s", buf);
-	    buf[0]=0;
+        char* strSeed = strstr(buf, "seed");
+        if(strSeed != NULL) {
+            strtok(strSeed, "=");
+            instanceSeed = atoi(strtok(NULL, "="));
+        }
+        buf[0]=0;
 	}
 	else if ( strcmp("COMMENT:", buf) == 0 ){
 	    fgets(buf, LINE_BUF_LEN, tsp_file);
 	    trace_print("%s", buf);
-	    buf[0]=0;
+        char* strSeed = strstr(buf, "seed");
+        if(strSeed != NULL) {
+            strtok(strSeed, "=");
+            instanceSeed = atoi(strtok(NULL, "="));
+        }
+        buf[0]=0;
 	}
 	else if ( strcmp("TYPE", buf) == 0 ) {
 	    fscanf(tsp_file, "%s", buf);
@@ -392,6 +453,8 @@ struct point * read_etsp(const char *tsp_file_name)
 	    buf[0]=0;
 	}
 	else if( strcmp("EDGE_WEIGHT_TYPE", buf) == 0 ){
+        /* set pointer to appropriate distance function; has to be one of 
+	       EUC_2D, CEIL_2D, GEO, ATT, or EXPLICIT. Everything else fails */
 	    buf[0]=0;
 	    fscanf(tsp_file, "%s", buf);
 	    trace_print("%s ", buf);
@@ -410,6 +473,10 @@ struct point * read_etsp(const char *tsp_file_name)
 	    else if ( strcmp("ATT", buf) == 0 ) {
 		distance = att_distance;
 	    }
+        else if ( strcmp("EXPLICIT", buf) == 0 ) {
+            initializeKeys(instanceSeed);
+            distance = explicit_distance;
+        }
 	    else
 		fprintf(stderr,"EDGE_WEIGHT_TYPE %s not implemented\n",buf);
 	    strcpy(instance.edge_weight_type, buf);
@@ -417,7 +484,7 @@ struct point * read_etsp(const char *tsp_file_name)
 	}
 	else if( strcmp("EDGE_WEIGHT_TYPE:", buf) == 0 ){
 	    /* set pointer to appropriate distance function; has to be one of 
-	       EUC_2D, CEIL_2D, GEO, or ATT. Everything else fails */
+	       EUC_2D, CEIL_2D, GEO, ATT, or EXPLICIT. Everything else fails */
 	    buf[0]=0;
 	    fscanf(tsp_file, "%s", buf);
 	    trace_print("%s\n", buf);
@@ -435,6 +502,10 @@ struct point * read_etsp(const char *tsp_file_name)
 	    else if ( strcmp("ATT", buf) == 0 ) {
 		distance = att_distance;
 	    }
+        else if ( strcmp("EXPLICIT", buf) == 0 ) {
+            initializeKeys(instanceSeed);
+            distance = explicit_distance;
+        }
 	    else {
 		fprintf(stderr,"EDGE_WEIGHT_TYPE %s not implemented\n",buf);
 		exit(1);
@@ -447,7 +518,7 @@ struct point * read_etsp(const char *tsp_file_name)
     }
 
 
-    if( strcmp("NODE_COORD_SECTION", buf) == 0 ){
+    if( (strcmp("NODE_COORD_SECTION", buf) == 0) || (strcmp("EDGE_WEIGHT_SECTION", buf) == 0) ){
 	trace_print("found section contaning the node coordinates\n");
 	    }
     else{
@@ -528,6 +599,3 @@ void printDist(void)
   }
   printf("\n");
 }
-
-
-
