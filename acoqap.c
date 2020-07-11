@@ -67,7 +67,7 @@
 #include "qap-ls.h"
 #include "adaptation.h"
 
-const char const * PROG_ID_STR = "ACO algorithms for the QAP";
+const char * const PROG_ID_STR = "ACO algorithms for the QAP";
 
 void problem_set_default_ls_parameters(void)
 {

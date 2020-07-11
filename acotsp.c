@@ -68,7 +68,7 @@
 #include "adaptation.h"
 #include "aco.h"
 
-const char const * PROG_ID_STR = "ACO algorithms for the TSP";
+const char * const PROG_ID_STR = "ACO algorithms for the TSP";
 
 void problem_set_default_ls_parameters(void)
 {

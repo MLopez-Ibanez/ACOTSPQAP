@@ -11,7 +11,7 @@ const char * get_instance_name(const struct problem *instance);
 long int ** compute_nn_lists (struct problem *instance);
 int check_solution(const long int *t);
 
-extern const char const * PROG_ID_STR;
+extern const char  * const PROG_ID_STR;
 
 
 #endif

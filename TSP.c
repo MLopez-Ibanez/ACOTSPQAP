@@ -68,9 +68,9 @@
 #define MAXCOORD 1000000
 
 long int n;          /* number of cities in the instance to be solved */
-int *key;            /* array of keys to generate random distance matrices */
-int param;           /* parameter to generate random distance matrices */
-double factor;       /* factor value to generate random distance matrices */
+static int *key;      /* array of keys to generate random distance matrices */
+static int param;     /* parameter to generate random distance matrices */
+static double factor; /* factor value to generate random distance matrices */
 
 struct problem instance;
 
