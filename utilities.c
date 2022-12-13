@@ -471,7 +471,7 @@ bool check_permutation(const long int *t, int size)
         if (!used[i]) {
             fprintf(stderr,"\n%s:error: vector position %d not occupied", __FUNCTION__, i);
             ok = false;
-            goto error;
+            break;
         }
     }
 

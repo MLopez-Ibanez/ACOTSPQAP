@@ -326,7 +326,7 @@ long int compute_tour_length(const long int *t )
 }
 
 
-int check_solution(const long int *t)
+bool check_solution(const long int *t)
 {
     int i;
     const int size = n;
@@ -338,14 +338,14 @@ int check_solution(const long int *t)
         fprintf(stderr,"\n%s:error: permutation is not a closed tour.", __FUNCTION__);
         goto error;
     }
-    return TRUE;
+    return true;
 
 error:
     fprintf(stderr,"\n%s:error: solution_vector:", __FUNCTION__);
     for (i = 0; i < size; i++)
         fprintf(stderr, " %ld", t[i]);
     fprintf(stderr,"\n");
-    return FALSE;
+    return false;
 }
 
 struct point * read_etsp(const char *tsp_file_name) 
@@ -369,7 +369,7 @@ struct point * read_etsp(const char *tsp_file_name)
     assert(tsp_file != NULL);
     printf("\nreading tsp-file %s ... \n\n", tsp_file_name);
 
-    int instanceSeed;
+    int instanceSeed = 1234567;
     fscanf(tsp_file,"%s", buf);
     while ( (strcmp("NODE_COORD_SECTION", buf) != 0) && (strcmp("EDGE_WEIGHT_SECTION", buf) != 0)) {
 	if ( strcmp("NAME", buf) == 0 ) {
@@ -390,7 +390,7 @@ struct point * read_etsp(const char *tsp_file_name)
 	    fgets(buf, LINE_BUF_LEN, tsp_file);
 	    trace_print("%s", buf);
         char* strSeed = strstr(buf, "seed");
-        if(strSeed != NULL) {
+        if (strSeed != NULL) {
             strtok(strSeed, "=");
             instanceSeed = atoi(strtok(NULL, "="));
         }

@@ -175,20 +175,17 @@ long int ** read_matrix( FILE *input, long int size )
   return matrix;
 }
 
-int check_solution(const long int *t)
+bool check_solution(const long int *t)
 {
     const int size = n;
 
-    if (!check_permutation (t, size))
-        goto error;
-
-    return TRUE;
-
-error:
-    fprintf(stderr,"\n%s:error: solution_vector:", __FUNCTION__);
-    vector_long_fprint (stderr, t, size);
-    fprintf(stderr,"\n");
-    return FALSE;
+    if (!check_permutation (t, size)) {
+        fprintf(stderr,"\n%s:error: solution_vector:", __FUNCTION__);
+        vector_long_fprint (stderr, t, size);
+        fprintf(stderr,"\n");
+        return false;
+    }
+    return true;
 }
 
 
