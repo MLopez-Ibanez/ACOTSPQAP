@@ -9,7 +9,7 @@
 # 		  only be used when releasing a new version. If you only want
 # 		  to edit the web, use the Makefile in web/ ('cd web/; make').
 #
-VERSION=0.995
+VERSION=0.996
 DEBUG=0
 TRACE=0
 
@@ -89,7 +89,7 @@ else
 	@exit 1
 endif
 
-dist : DIST_SRC_FILES=*.c *.h README Makefile gpl.txt *.def tsp/*.tsp qap/*.dat irace/
+dist : DIST_SRC_FILES=*.c *.h README.md Makefile gpl.txt *.def tsp/*.tsp qap/*.dat irace/
 dist : DISTFILENAME:=ACOTSPQAP-$(VERSION)
 dist : DISTDIR:=../
 dist : all
