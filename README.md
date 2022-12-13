@@ -1,35 +1,37 @@
 ACOTSPQAP: Ant Colony Optimization Algorithms for the Travelling Salesman Problem and the Quadratic Assignment Problem
 ===============================================================================
         
-Manuel López-Ibáñez and Thomas Stützle
-<http://iridia.ulb.ac.be/aco-tsp-qap/>
+[Manuel López-Ibáñez](https://lopez-ibanez.eu) and [Thomas Stützle](http://iridia.ulb.ac.be/~stuetzle)
 
--------------------------------------------------------------------------------
+GitHub: https://github.com/MLopez-Ibanez/ACOTSPQAP/
 
-ACOTSPQAP is a software package that implements various Ant Colony Optimization
+Description
+-----------
+
+ACOTSPQAP is a software package that implements various [Ant Colony Optimization](http://iridia.ulb.ac.be/~mdorigo/ACO/ACO.html)
 algorithms for the symmetric travelling salesman problem (TSP) and the
-quadratic assignment problem (QAP). The ACO algorithms implemented are Ant
+quadratic assignment problem (QAP).  The ACO algorithms implemented are Ant
 System (AS), Elitist Ant System (EAS), MAX-MIN Ant System (MMAS), Rank-based
 Ant System (RAS), Best-Worst Ant System (BWAS), and Ant Colony System
 (ACS).  These algorithms may be combined with problem-specific local search.
 
 The goal of this software is to provide a reasonable high-performing
-implementation of ACO algorithms under a component-wise framework.  Individuals
+implementation of ACO algorithms under a component-wise framework [1].  Individuals
 components of the ACO algorithms can be tuned by using more than 40
-command-line parameters (see `--help`).  Additional parameters control
+command-line parameters (see `--help`).  This version provided additional parameters control
 parameter variation (see [2]).
 
-The implementation builds upon the earlier [ACOTSP](http://iridia.ulb.ac.be/~mdorigo/ACO/aco-code/public-software.html) package.
+The implementation builds upon the earlier [ACOTSP package](http://iridia.ulb.ac.be/~mdorigo/ACO/aco-code/public-software.html).
 
-Relevant literature:
+### Relevant literature: ###
 
-1. Manuel López-Ibáñez, Thomas Stützle, and Marco Dorigo. Ant Colony
-   Optimization: A Component-Wise Overview. In R. Martí, P. M. Pardalos, and
+1. Manuel López-Ibáñez, Thomas Stützle, and Marco Dorigo. [Ant Colony
+   Optimization: A Component-Wise Overview](https://doi.org/10.1007/978-3-319-07153-4_21-1). In R. Martí, P. M. Pardalos, and
    M. G. C. Resende, editors, Handbook of Heuristics, pages 1–37. Springer
    International Publishing, 2017. doi: 10.1007/978-3-319-07153-4_21-1
 
-2. M. López-Ibáñez and T. Stützle. Automatically improving the anytime
-    behaviour of optimisation algorithms. European Journal of Operational
+2. M. López-Ibáñez and T. Stützle. [Automatically improving the anytime
+    behaviour of optimisation algorithms](https://doi.org/10.1016/j.ejor.2013.10.043). European Journal of Operational
     Research, 2013. doi:10.1016/j.ejor.2013.10.043.
 
 
@@ -44,7 +46,7 @@ License
 -------
 
 ACOTSPQAP is Copyright (c) 2013-2015 
-Manuel Lopez-Ibanez <manuel.lopez-ibanez@ulb.ac.be>
+Manuel Lopez-Ibanez <manuel.lopez-ibanez@manchester.ac.uk>
 Thomas Stuetzle <stuetzle@ulb.ac.be>
 
 This program is free software (software libre); you can redistribute
