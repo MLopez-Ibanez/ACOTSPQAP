@@ -23,7 +23,7 @@ ifneq ($(TRACE),0)
 TRACEFLAGS=-DTRACE=$(TRACE)
 endif
 
-OPT_FLAGS=-O2 -ffast-math
+OPT_FLAGS=-O2 -flto -ffast-math
 WARN_FLAGS=-Wall -Wextra -std=c99 -pedantic
 CFLAGS= -DVERSION=\"$(VERSION)\" $(WARN_FLAGS) $(OPT_FLAGS) $(DEBUGFLAGS) $(TRACEFLAGS)
 LDLIBS+= $(OPT_FLAGS) -lm

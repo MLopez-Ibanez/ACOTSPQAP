@@ -53,7 +53,8 @@
 /* This is actually enum ls_types */
 extern unsigned int ls_flag;
 extern const unsigned int LS_MAX;
-extern long int nn_ls; 
+extern long int nn_ls; /* maximal depth of nearest neighbour lists used in the
+                          local search */ 
 
 extern long int dlb_flag; 
 void local_search(unsigned int ls_type, long int *tour);
